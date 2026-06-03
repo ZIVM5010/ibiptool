@@ -1,0 +1,5 @@
+server.js
+.vercelignore
+.vercel/
+node_modules/
+*.log

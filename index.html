@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IBIPTool — Mass-Upload SAP PM Data Straight From Excel</title>
+<link rel="icon" type="image/png" href="logo.png" />
+<meta name="description" content="IBIPTool by SY-Bright automates mass upload and maintenance of SAP Plant Maintenance master and transactional data from Excel — built on SAP's standard IBIP framework. Test-run validation, template generation, and data extraction." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b1020;
+    --bg-soft:#121a33;
+    --card:#16203f;
+    --ink:#eaf0ff;
+    --muted:#9fb0d4;
+    --brand:#2f7bff;
+    --brand-2:#16d3c4;
+    --line:rgba(255,255,255,.09);
+    --radius:16px;
+    --maxw:1140px;
+    --shadow:0 20px 50px -20px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1200px 700px at 75% -10%,rgba(47,123,255,.22),transparent 60%),
+               radial-gradient(900px 600px at 0% 10%,rgba(22,211,196,.12),transparent 55%),
+               var(--bg);
+    color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;transition:.2s transform,.2s box-shadow,.2s background}
+  .btn-primary{background:linear-gradient(135deg,var(--brand),#1b5fe0);color:#fff;box-shadow:0 12px 30px -10px rgba(47,123,255,.7)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);background:rgba(255,255,255,.03);color:var(--ink)}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.25)}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(11,16,32,.72);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:20px;letter-spacing:-.3px}
+  .logo-chip{display:inline-flex;align-items:center;background:#fff;border-radius:11px;padding:9px 15px;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+  .logo-chip img{height:40px;width:auto;display:block}
+  footer .logo-chip img{height:34px}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:15px;font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .nav .cta{display:flex;gap:12px;align-items:center}
+  .menu-btn{display:none;background:none;border:0;color:var(--ink);font-size:26px;cursor:pointer}
+
+  /* Hero */
+  .hero{padding:84px 0 60px}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);background:rgba(255,255,255,.03);margin-bottom:26px}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 4px rgba(22,211,196,.18)}
+  h1{font-size:clamp(34px,5.2vw,60px);line-height:1.05;letter-spacing:-1.5px;margin:0 0 20px;font-weight:800}
+  h1 .grad{background:linear-gradient(135deg,#7db1ff,var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:620px;margin:0 0 32px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .micro{font-size:13.5px;color:var(--muted)}
+  .micro b{color:var(--ink)}
+
+  /* Trust bar */
+  .trust{margin-top:64px;padding-top:30px;border-top:1px solid var(--line)}
+  .trust p{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+  .logos{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:center}
+  .logos span{font-size:20px;font-weight:700;color:#cdd8f3;opacity:.75;letter-spacing:.3px}
+
+  /* Sections */
+  section{padding:80px 0}
+  .eyebrow{color:var(--brand-2);font-weight:600;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 12px}
+  h2{font-size:clamp(28px,3.6vw,40px);letter-spacing:-1px;margin:0 0 16px;font-weight:800}
+  .section-lead{color:var(--muted);max-width:680px;font-size:17px}
+
+  /* Feature grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:46px}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.25s transform,.25s border-color}
+  .card:hover{transform:translateY(-4px);border-color:rgba(47,123,255,.5)}
+  .card .ic{width:46px;height:46px;border-radius:11px;background:rgba(47,123,255,.14);display:grid;place-items:center;margin-bottom:18px;font-size:22px}
+  .card h3{margin:0 0 8px;font-size:19px;font-weight:700}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+
+  /* Steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:46px}
+  .step{position:relative;padding:26px 22px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius)}
+  .step .n{font-size:13px;font-weight:700;color:var(--brand-2);letter-spacing:1px}
+  .step h4{margin:10px 0 6px;font-size:17px}
+  .step p{margin:0;color:var(--muted);font-size:14.5px}
+
+  /* Benefits split */
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+  .checklist{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+  .checklist li{display:flex;gap:13px;align-items:flex-start;font-size:16px;color:#dde6fb}
+  .checklist .tick{flex:none;width:24px;height:24px;border-radius:7px;background:rgba(22,211,196,.16);color:var(--brand-2);display:grid;place-items:center;font-weight:800;font-size:13px;margin-top:2px}
+  .panel{background:linear-gradient(160deg,var(--card),#0e1630);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow)}
+  .panel .bar{display:flex;gap:7px;margin-bottom:16px}
+  .panel .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .panel .bar i:nth-child(1){background:#ff5f57}.panel .bar i:nth-child(2){background:#febc2e}.panel .bar i:nth-child(3){background:#28c840}
+  .xls{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+  .xls .row{display:grid;grid-template-columns:34px 1fr 1fr 1fr;border-top:1px solid var(--line)}
+  .xls .row>div{padding:9px 10px;border-left:1px solid var(--line);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .xls .row.head>div{color:var(--ink);background:rgba(47,123,255,.10);font-weight:600}
+  .xls .row>div:first-child{color:#6f80a6;text-align:center;border-left:0}
+  .xls .ok{color:var(--brand-2)}
+
+  /* Objects grid */
+  .obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px}
+  .obj{display:flex;flex-direction:column;gap:4px;padding:18px 20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;transition:.2s border-color,.2s transform}
+  .obj:hover{border-color:rgba(47,123,255,.5);transform:translateY(-3px)}
+  .obj .tx{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;font-weight:700;color:var(--brand-2);letter-spacing:.5px}
+  .obj .ob{font-size:15.5px;color:#dde6fb;font-weight:600}
+  .obj-more{background:linear-gradient(135deg,rgba(47,123,255,.16),rgba(22,211,196,.10));border-color:rgba(47,123,255,.4)}
+  .obj-more .tx{color:#9fd0ff}
+  @media(max-width:760px){.obj-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.obj-grid{grid-template-columns:1fr}}
+
+  /* Video */
+  .video-frame{max-width:900px;margin:0 auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#000;box-shadow:var(--shadow)}
+  .video-frame video{display:block;width:100%;height:auto;background:#0a0f1f}
+  .yt{position:relative;width:100%;padding-top:56.25%}
+  .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  /* Comparison */
+  .cmp{margin-top:42px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
+  .cmp-row{display:grid;grid-template-columns:1.1fr 1.3fr 1.3fr;border-top:1px solid var(--line)}
+  .cmp-row:first-child{border-top:0}
+  .cmp-row>div{padding:15px 18px;font-size:15px;color:var(--muted);border-left:1px solid var(--line)}
+  .cmp-row>div:first-child{border-left:0;color:#dde6fb;font-weight:600}
+  .cmp-head>div{background:rgba(255,255,255,.03);color:var(--ink);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+  .cmp-us{background:rgba(47,123,255,.10)!important;color:#eaf0ff!important;font-weight:600}
+  .cmp-head .cmp-us{color:var(--brand-2)!important}
+  @media(max-width:680px){.cmp-row{grid-template-columns:1fr;}.cmp-row>div{border-left:0;border-top:1px solid var(--line)}.cmp-row>div:first-child{padding-bottom:4px}}
+  @media(max-width:680px){#open .checklist{grid-template-columns:1fr!important}}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:10px}
+  .stat{text-align:center;padding:26px 16px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius)}
+  .stat .big{font-size:38px;font-weight:800;background:linear-gradient(135deg,#7db1ff,var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+  .stat .lbl{color:var(--muted);font-size:14px;margin-top:8px}
+
+  /* CTA */
+  .cta-band{margin:30px auto;background:linear-gradient(135deg,rgba(47,123,255,.18),rgba(22,211,196,.12));border:1px solid var(--line);border-radius:24px;padding:54px 40px;text-align:center}
+  .cta-band h2{margin-bottom:10px}
+  .cta-band p{color:var(--muted);max-width:560px;margin:0 auto 26px;font-size:17px}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:46px 0 40px;color:var(--muted);font-size:14.5px}
+  .foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+  .foot a{color:var(--muted)}.foot a:hover{color:var(--ink)}
+
+  @media(max-width:900px){
+    .grid,.steps,.stats{grid-template-columns:repeat(2,1fr)}
+    .split{grid-template-columns:1fr;gap:34px}
+    .nav-links{display:none}
+    .menu-btn{display:block}
+  }
+  @media(max-width:560px){
+    .grid,.steps,.stats{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span class="logo-chip"><img src="logo.png" alt="IBIPTool" /></span></a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#objects">Coverage</a>
+      <a href="#how">How it works</a>
+      <a href="#demo">Demo</a>
+      <a href="#why">Why IBIPTool</a>
+      <a href="#open">Open ABAP</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="cta">
+      <a class="btn btn-ghost" href="#contact">Request a demo</a>
+      <a class="btn btn-primary" href="#contact">Get a license</a>
+    </div>
+    <button class="menu-btn" aria-label="menu">☰</button>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="badge"><span class="dot"></span> Built on SAP's standard IBIP framework</div>
+      <h1>Mass-upload SAP&nbsp;PM data <span class="grad">straight from Excel</span></h1>
+      <p class="lead">IBIPTool automates the bulk creation and maintenance of SAP Plant Maintenance master &amp; transactional data — equipment, functional locations, measuring points, task lists, maintenance plans and more — directly from a spreadsheet. A configuration-driven engine means it can drive virtually <b>any SAP transaction</b> via a recording. No custom development per object. No manual screen entry.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contact">Get a license →</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <p class="micro">Trusted in production at large enterprises · <b>Excel-driven</b> · <b>Test-run safe</b> · Web GUI compatible</p>
+
+      <div class="trust">
+        <p>In production at enterprises across energy, utilities, food &amp; beverage and manufacturing</p>
+        <div class="logos">
+          <span>⚡ Energy</span><span>💧 Utilities</span><span>🥫 Food &amp; Beverage</span><span>🏭 Manufacturing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <p class="eyebrow">Capabilities</p>
+      <h2>Everything you need to move PM data at scale</h2>
+      <p class="section-lead">One tool to load, validate, template and extract Plant Maintenance data — driving SAP's proven IBIP / batch-input infrastructure under the hood.</p>
+      <div class="grid">
+        <div class="card"><div class="ic">⬆️</div><h3>Mass upload</h3><p>Bulk-create and update PM master &amp; transactional data via IBIP / BDC from a single Excel file — thousands of records in one run.</p></div>
+        <div class="card"><div class="ic">🧪</div><h3>Test-run mode</h3><p>Validate the entire upload without committing. Catch errors before they touch production, then post with confidence.</p></div>
+        <div class="card"><div class="ic">📄</div><h3>Template generation</h3><p>Auto-generate the exact Excel upload template for any object or transaction, with the right columns in the right order.</p></div>
+        <div class="card"><div class="ic">📥</div><h3>Data extraction</h3><p>Pull existing SAP data back out into Excel using the eCATT recording mechanism — perfect for edit-and-reload cycles.</p></div>
+        <div class="card"><div class="ic">🌐</div><h3>Web GUI native</h3><p>Runs cleanly in SAP Web GUI — the latest version needs <b>no external Excel</b> and no OLE/desktop dependency. Modern, browser-based deployments just work.</p></div>
+        <div class="card"><div class="ic">🔧</div><h3>Any transaction, by config</h3><p>A configuration-driven engine maps each object to its screen recording — so you can extend IBIPTool to drive <b>any SAP transaction</b>, no reprogramming.</p></div>
+        <div class="card"><div class="ic">📊</div><h3>Excel reporting — no ABAP</h3><p>Read data back out of SAP into Excel via a recording. Need material prices or any field as a report? Build it yourself in minutes instead of waiting on a developer.</p></div>
+        <div class="card"><div class="ic">♻️</div><h3>Error log &amp; re-run</h3><p>Every run produces a clear ALV log. Fix only the rows that failed and <b>re-run just those records</b> — no need to reprocess the whole file.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORTED OBJECTS -->
+  <section id="objects" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Coverage</p>
+      <h2>Built for SAP Plant Maintenance — and beyond</h2>
+      <p class="section-lead">Out of the box IBIPTool handles the full PM data model. Because it's recording-driven, the same engine extends to QM, MM and any other transaction you record.</p>
+      <div class="obj-grid">
+        <div class="obj"><span class="tx">IE01 / IE02</span><span class="ob">Equipment</span></div>
+        <div class="obj"><span class="tx">IL01 / IL02</span><span class="ob">Functional Locations</span></div>
+        <div class="obj"><span class="tx">IK01</span><span class="ob">Measuring Points</span></div>
+        <div class="obj"><span class="tx">IA05 / IA06</span><span class="ob">Task Lists</span></div>
+        <div class="obj"><span class="tx">IP01 / IP42</span><span class="ob">Maintenance Plans</span></div>
+        <div class="obj"><span class="tx">IR01</span><span class="ob">Work Centers</span></div>
+        <div class="obj"><span class="tx">QS41</span><span class="ob">QM Catalogs / Codes</span></div>
+        <div class="obj"><span class="tx">ME21N</span><span class="ob">Purchase Orders (MM)</span></div>
+        <div class="obj obj-more"><span class="tx">+ recording</span><span class="ob">Any other transaction</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="background:linear-gradient(180deg,transparent,rgba(255,255,255,.02),transparent)">
+    <div class="wrap">
+      <p class="eyebrow">Workflow</p>
+      <h2>From spreadsheet to SAP in four steps</h2>
+      <p class="section-lead">A predictable, repeatable process your functional team can own — no ABAP work for each new load.</p>
+      <div class="steps">
+        <div class="step"><div class="n">STEP 1</div><h4>Generate template</h4><p>Pick your object and let IBIPTool produce the matching Excel template.</p></div>
+        <div class="step"><div class="n">STEP 2</div><h4>Fill in your data</h4><p>Populate rows in Excel — or extract existing SAP data, edit, and reload.</p></div>
+        <div class="step"><div class="n">STEP 3</div><h4>Test run</h4><p>Validate everything against SAP without posting. Review and fix flagged rows.</p></div>
+        <div class="step"><div class="n">STEP 4</div><h4>Upload</h4><p>Commit the load. IBIPTool drives IBIP/BDC to create and update records in SAP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO VIDEO -->
+  <section id="demo" style="padding-top:30px">
+    <div class="wrap" style="text-align:center">
+      <p class="eyebrow" style="justify-self:center">See it in action</p>
+      <h2>Watch IBIPTool upload SAP data live</h2>
+      <p class="section-lead" style="margin:0 auto 36px">See the latest version — running fully inside SAP Web GUI, with no external Excel — take data from a spreadsheet to a validated SAP upload.</p>
+      <div class="video-frame">
+        <div class="yt">
+          <iframe src="https://www.youtube.com/embed/DV2lUujeHXs" title="IBIPTool demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+      <p class="micro" style="margin:22px 0 10px">Prefer a quick local clip? Here's a short walkthrough:</p>
+      <div class="video-frame" style="max-width:680px">
+        <video controls preload="metadata" poster="logo-hires.png" playsinline>
+          <source src="demo.mp4" type="video/mp4" />
+          Your browser doesn't support embedded video. <a href="demo.mp4">Download the demo</a>.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY / BENEFITS -->
+  <section id="why">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Why IBIPTool</p>
+        <h2>Cut data-migration effort from weeks to hours</h2>
+        <p class="section-lead">Standard SAP tooling for PM mass changes is slow, technical, and error-prone. IBIPTool gives functional teams a safe, Excel-first way to do it themselves.</p>
+        <ul class="checklist">
+          <li><span class="tick">✓</span><span>Built on SAP's <b>standard IBIP</b> infrastructure — no risky direct table writes.</span></li>
+          <li><span class="tick">✓</span><span><b>Test-run first</b> means no surprises in production.</span></li>
+          <li><span class="tick">✓</span><span>Functional users work in <b>Excel</b> — minimal training, no ABAP per object.</span></li>
+          <li><span class="tick">✓</span><span><b>Extract → edit → reload</b> makes mass maintenance trivial.</span></li>
+          <li><span class="tick">✓</span><span>Runs in <b>Web GUI</b> — ready for modern SAP landscapes.</span></li>
+        </ul>
+      </div>
+      <div class="panel" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="xls">
+          <div class="row head"><div>#</div><div>Equipment</div><div>FuncLoc</div><div>Status</div></div>
+          <div class="row"><div>1</div><div>PUMP-1001</div><div>PLANT-A-01</div><div class="ok">✓ loaded</div></div>
+          <div class="row"><div>2</div><div>MOTOR-2043</div><div>PLANT-A-02</div><div class="ok">✓ loaded</div></div>
+          <div class="row"><div>3</div><div>VALVE-3310</div><div>PLANT-B-07</div><div class="ok">✓ loaded</div></div>
+          <div class="row"><div>4</div><div>SENSOR-880</div><div>PLANT-B-07</div><div class="ok">✓ loaded</div></div>
+          <div class="row"><div>5</div><div>GEARBX-512</div><div>PLANT-C-01</div><div class="ok">✓ loaded</div></div>
+        </div>
+        <p class="micro" style="margin:16px 0 0">Test run complete · 5 / 5 records validated · 0 errors</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON / TRUST -->
+  <section id="open" style="background:linear-gradient(180deg,transparent,rgba(255,255,255,.02),transparent)">
+    <div class="wrap">
+      <p class="eyebrow">Open by design</p>
+      <h2>Transparent ABAP — not a third-party black box</h2>
+      <p class="section-lead">Desktop tools like Winshuttle (Precisely Automate) and Process Runner connect to SAP as external clients over RFC/BAPI — useful, but the runtime logic lives outside your system and outside your audit. IBIPTool runs <b>entirely inside SAP as open, readable ABAP</b>, on the standard IBIP transaction that SAP still supports in S/4HANA.</p>
+
+      <div class="cmp">
+        <div class="cmp-row cmp-head">
+          <div></div><div class="cmp-us">IBIPTool</div><div>Typical 3rd-party client</div>
+        </div>
+        <div class="cmp-row"><div>Where it runs</div><div class="cmp-us">Inside SAP, as ABAP</div><div>External desktop / server client</div></div>
+        <div class="cmp-row"><div>How it talks to SAP</div><div class="cmp-us">Standard IBIP transaction (PM)</div><div>RFC / BAPI calls</div></div>
+        <div class="cmp-row"><div>Auditability</div><div class="cmp-us">Full source — your team reads every line</div><div>Vendor black box</div></div>
+        <div class="cmp-row"><div>Install footprint</div><div class="cmp-us">One SAP transport</div><div>Client software + RFC libraries &amp; access</div></div>
+        <div class="cmp-row"><div>Test run before posting</div><div class="cmp-us">Built in</div><div>Varies</div></div>
+        <div class="cmp-row"><div>Re-run failed rows from log</div><div class="cmp-us">Yes — ALV error log</div><div>Varies</div></div>
+        <div class="cmp-row"><div>S/4HANA</div><div class="cmp-us">Runs on supported IBIP</div><div>Varies by vendor</div></div>
+      </div>
+
+      <ul class="checklist" style="margin-top:34px;grid-template-columns:repeat(2,1fr);display:grid;gap:14px 30px">
+        <li><span class="tick">✓</span><span><b>Standard SAP foundation</b> — built on the IBIP transaction in the PM module, extended through a standard SAP user exit.</span></li>
+        <li><span class="tick">✓</span><span><b>Nothing proprietary to hide</b> — no external agent, no opaque RFC layer your Basis team can't inspect.</span></li>
+        <li><span class="tick">✓</span><span><b>Lower governance &amp; security risk</b> — smaller attack surface and an easier security sign-off than installing a third-party tool.</span></li>
+        <li><span class="tick">✓</span><span><b>A genuinely unique approach</b> — a Web-GUI add-on driving the standard IBIP transaction, not another external RFC client.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat"><div class="big">1000s</div><div class="lbl">of records per run</div></div>
+        <div class="stat"><div class="big">0</div><div class="lbl">lines of ABAP per load</div></div>
+        <div class="stat"><div class="big">100%</div><div class="lbl">on standard SAP IBIP</div></div>
+        <div class="stat"><div class="big">.xlsx</div><div class="lbl">native Excel in &amp; out</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" style="padding-top:30px">
+    <div class="wrap">
+      <div class="cta-band">
+        <p class="eyebrow" style="justify-self:center">Get started</p>
+        <h2>Bring IBIPTool to your SAP landscape</h2>
+        <p>Request a license or a live demo. We'll show you how fast PM data migration and mass maintenance can really be.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a class="btn btn-primary" href="mailto:zivm@sy-bright.co.il?subject=IBIPTool%20license%20enquiry">Email us for a license</a>
+          <a class="btn btn-ghost" href="mailto:zivm@sy-bright.co.il?subject=IBIPTool%20demo%20request">Request a demo</a>
+        </div>
+        <p class="micro" style="margin-top:18px">zivm@sy-bright.co.il · Led by Ziv Marcovich, SY-Bright · Mon–Fri 09:00–17:00</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="logo-chip"><img src="logo.png" alt="IBIPTool" /></span>
+    <div>© <span id="yr"></span> IBIP Tool — All Rights Reserved. SAP and IBIP are trademarks of SAP SE. IBIPTool is an independent product and is not affiliated with SAP SE.</div>
+    <div><a href="mailto:zivm@sy-bright.co.il">zivm@sy-bright.co.il</a></div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // mobile menu: simple jump to contact for now
+  document.querySelector('.menu-btn').addEventListener('click',function(){
+    document.querySelector('#features').scrollIntoView({behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
