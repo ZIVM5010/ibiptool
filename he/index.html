@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IBIPTool — העלאה מסיבית של נתוני SAP PM מ-Excel | SY-Bright</title>
+<link rel="icon" type="image/png" href="../logo.png" />
+<meta name="description" content="IBIPTool מאת SY-Bright מאפשר העלאה מסיבית ותחזוקת נתוני SAP Plant Maintenance ישירות מ-Excel — מבוסס על תשתית IBIP הסטנדרטית של SAP. אימות בריצת בדיקה, יצירת תבניות ומיצוי נתונים." />
+
+<!-- Canonical & hreflang -->
+<link rel="canonical" href="https://ibiptool.com/he/" />
+<link rel="alternate" hreflang="he" href="https://ibiptool.com/he/" />
+<link rel="alternate" hreflang="en" href="https://ibiptool.com/" />
+<link rel="alternate" hreflang="x-default" href="https://ibiptool.com/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ibiptool.com/he/" />
+<meta property="og:site_name" content="IBIPTool מאת SY-Bright" />
+<meta property="og:title" content="IBIPTool — העלאה מסיבית של נתוני SAP PM מ-Excel" />
+<meta property="og:description" content="הכלי הישראלי להעלאה מסיבית של נתוני SAP Plant Maintenance. ציוד, מיקומים פונקציונליים, נקודות מדידה, רשימות משימות ועוד — מ-Excel ישירות ל-SAP." />
+<meta property="og:image" content="https://ibiptool.com/logo-hires.png" />
+<meta property="og:locale" content="he_IL" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="IBIPTool — העלאה מסיבית של נתוני SAP PM" />
+<meta name="twitter:description" content="העלאת אלפי רשומות SAP PM מ-Excel בריצה אחת. אימות לפני פרסום. Web GUI. מבוסס IBIP סטנדרטי." />
+<meta name="twitter:image" content="https://ibiptool.com/logo-hires.png" />
+
+<!-- SEO -->
+<meta name="robots" content="index, follow" />
+<meta name="author" content="זיו מרקוביץ׳, SY-Bright" />
+<meta name="keywords" content="SAP PM העלאה מסיבית, IBIP כלי, SAP Plant Maintenance Excel, העלאת נתונים SAP, IBIPTool, SY-Bright, ציוד SAP, מיקום פונקציונלי SAP, BDC SAP, GuiXT, SAP ישראל, S4HANA העלאת מידע" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "IBIPTool",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "SAP Web GUI, SAP GUI",
+  "url": "https://ibiptool.com",
+  "description": "IBIPTool מאפשר העלאה מסיבית ותחזוקת נתוני SAP Plant Maintenance מ-Excel, מבוסס על תשתית IBIP הסטנדרטית של SAP.",
+  "inLanguage": "he",
+  "author": {
+    "@type": "Organization",
+    "name": "SY-Bright",
+    "url": "https://sy-bright.co.il",
+    "email": "zivm@sy-bright.co.il",
+    "address": { "@type": "PostalAddress", "addressCountry": "IL" }
+  },
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b1020;--bg-soft:#121a33;--card:#16203f;
+    --ink:#eaf0ff;--muted:#9fb0d4;--brand:#2f7bff;--brand-2:#16d3c4;
+    --line:rgba(255,255,255,.09);--radius:16px;--maxw:1100px;
+    --shadow:0 20px 50px -20px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:'Heebo',Arial,sans-serif;
+    background:radial-gradient(1200px 700px at 25% -10%,rgba(47,123,255,.22),transparent 60%),
+               radial-gradient(900px 600px at 100% 10%,rgba(22,211,196,.12),transparent 55%),
+               var(--bg);
+    color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;
+    direction:rtl;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:700;font-size:15px;border:1px solid transparent;cursor:pointer;transition:.2s}
+  .btn-primary{background:linear-gradient(135deg,var(--brand),#1b5fe0);color:#fff;box-shadow:0 12px 30px -10px rgba(47,123,255,.7)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);background:rgba(255,255,255,.03);color:var(--ink)}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.25)}
+
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(11,16,32,.72);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo-chip{display:inline-flex;align-items:center;background:#fff;border-radius:11px;padding:9px 15px;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+  .logo-chip img{height:38px;width:auto;display:block}
+  .nav-links{display:flex;gap:24px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:15px;font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .lang-switch{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:5px 12px;border-radius:8px}
+  .lang-switch:hover{color:var(--ink);border-color:rgba(255,255,255,.3)}
+
+  .hero{padding:84px 0 60px;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);background:rgba(255,255,255,.03);margin-bottom:24px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 4px rgba(22,211,196,.18)}
+  h1{font-size:clamp(32px,5vw,56px);line-height:1.1;letter-spacing:-.5px;margin:0 0 20px;font-weight:800}
+  h2{font-size:clamp(22px,3.5vw,36px);font-weight:800;margin:0 0 16px;letter-spacing:-.3px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand-2);margin:0 0 12px}
+  .lead{font-size:18px;color:var(--muted);max-width:680px;margin:0 auto 32px;line-height:1.7}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+  .trust{font-size:13px;color:var(--muted);display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+  .trust span::before{content:"✓ ";color:var(--brand-2)}
+
+  section{padding:80px 0}
+  .section-header{text-align:center;margin-bottom:52px}
+
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.2s}
+  .card:hover{border-color:rgba(47,123,255,.4);box-shadow:var(--shadow)}
+  .card-icon{font-size:28px;margin-bottom:14px}
+  .card h3{font-size:17px;font-weight:700;margin:0 0 10px}
+  .card p{font-size:14px;color:var(--muted);margin:0;line-height:1.65}
+
+  .objects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .obj{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px}
+  .obj-code{font-family:Consolas,monospace;font-size:13px;color:var(--brand-2);font-weight:700}
+  .obj-name{font-size:14px;color:var(--muted)}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;counter-reset:step}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;position:relative}
+  .step-num{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--brand);text-transform:uppercase;margin-bottom:14px}
+  .step h3{font-size:16px;font-weight:700;margin:0 0 8px}
+  .step p{font-size:13px;color:var(--muted);margin:0}
+
+  /* GuiXT comparison */
+  .guixt-box{background:linear-gradient(135deg,rgba(47,123,255,.1),rgba(22,211,196,.08));border:1px solid rgba(47,123,255,.25);border-radius:var(--radius);padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+  .guixt-box h3{font-size:17px;font-weight:700;margin:0 0 12px;color:var(--brand-2)}
+  .guixt-box p{font-size:14px;color:var(--muted);margin:0 0 12px;line-height:1.65}
+  .guixt-box ul{margin:0;padding-right:18px;font-size:14px;color:var(--muted);line-height:2}
+  @media(max-width:640px){.guixt-box{grid-template-columns:1fr}}
+
+  .cta-band{background:linear-gradient(135deg,var(--bg-soft),var(--card));border:1px solid var(--line);border-radius:24px;padding:56px 40px;text-align:center}
+  .cta-band h2{margin-bottom:12px}
+  .cta-band p{color:var(--muted);max-width:540px;margin:0 auto 28px}
+  .micro{font-size:12px;color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);padding:32px 0}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+  footer .logo-chip img{height:30px}
+
+  @media(max-width:720px){
+    .nav-links{display:none}
+    h1{font-size:32px}
+    .guixt-box{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="/he/"><span class="logo-chip"><img src="../logo.png" alt="IBIPTool" /></span></a>
+    <nav class="nav-links">
+      <a href="#features">יכולות</a>
+      <a href="#objects">כיסוי</a>
+      <a href="#how">כיצד עובד</a>
+      <a href="#guixt">GuiXT</a>
+      <a href="#contact">צור קשר</a>
+    </nav>
+    <a class="lang-switch" href="/">English</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="badge"><span class="dot"></span> מבוסס על תשתית IBIP הסטנדרטית של SAP</div>
+      <h1>העלאה מסיבית של נתוני<br>SAP Plant Maintenance<br>ישירות מ-Excel</h1>
+      <p class="lead">IBIPTool מאפשר לצוות הפונקציונלי שלך ליצור ולתחזק אלפי רשומות SAP PM — ציוד, מיקומים פונקציונליים, נקודות מדידה, תוכניות תחזוקה ועוד — מגיליון Excel יחיד, ללא פיתוח ABAP.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contact">בקש הדגמה חינם &rarr;</a>
+        <a class="btn btn-ghost" href="#how">כיצד זה עובד</a>
+      </div>
+      <div class="trust">
+        <span>בשימוש בייצור בארגונים גדולים</span>
+        <span>מונע מ-Excel</span>
+        <span>ריצת בדיקה לפני פרסום</span>
+        <span>תואם Web GUI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="eyebrow">יכולות</p>
+        <h2>כל מה שצריך להעברת נתוני PM בקנה מידה</h2>
+        <p style="color:var(--muted);max-width:600px;margin:0 auto">כלי אחד לטעינה, אימות, יצירת תבניות ומיצוי נתוני Plant Maintenance — המניע את תשתית IBIP/BDC המוכחת של SAP.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card"><div class="card-icon">⬆️</div><h3>העלאה מסיבית</h3><p>יצירה ועדכון של נתוני PM מאסטר ועסקאות באמצעות IBIP/BDC מקובץ Excel יחיד — אלפי רשומות בריצה אחת.</p></div>
+        <div class="card"><div class="card-icon">🧪</div><h3>ריצת בדיקה</h3><p>אמת את כל ההעלאה מבלי להתחייב. תפוס שגיאות לפני שנוגעות בייצור, ואז פרסם בביטחון.</p></div>
+        <div class="card"><div class="card-icon">📄</div><h3>יצירת תבניות</h3><p>צור אוטומטית את תבנית Excel הנכונה לכל אובייקט או טרנזקציה, עם העמודות הנכונות בסדר הנכון.</p></div>
+        <div class="card"><div class="card-icon">📥</div><h3>מיצוי נתונים</h3><p>שלוף נתוני SAP קיימים חזרה ל-Excel באמצעות מנגנון הקלטת eCATT — מושלם למחזורי עריכה-וטעינה-מחדש.</p></div>
+        <div class="card"><div class="card-icon">🌐</div><h3>Web GUI נייטיב</h3><p>רץ בצורה נקייה ב-SAP Web GUI — גרסה עדכנית ללא תלות בExcel חיצוני. פריסות מודרניות פשוט עובדות.</p></div>
+        <div class="card"><div class="card-icon">🔧</div><h3>כל טרנזקציה, בקונפיגורציה</h3><p>מנוע מונע-קונפיגורציה ממפה כל אובייקט להקלטת המסך שלו — הרחב ל-SAP כלשהו ללא תכנות מחדש.</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>דיווח Excel — ללא ABAP</h3><p>קרא נתונים מ-SAP ל-Excel באמצעות הקלטה. צור דוחות מותאמים אישית בדקות במקום לחכות למפתח.</p></div>
+        <div class="card"><div class="card-icon">♻️</div><h3>לוג שגיאות וריצה מחדש</h3><p>כל ריצה מייצרת לוג ALV ברור. תקן רק את השורות שנכשלו וריץ מחדש רק אותן — ללא עיבוד מחדש של הקובץ כולו.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Objects Coverage -->
+  <section id="objects" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="eyebrow">כיסוי</p>
+        <h2>בנוי ל-SAP Plant Maintenance — ומעבר</h2>
+        <p style="color:var(--muted);max-width:580px;margin:0 auto">מהקופסה IBIPTool מטפל במודל הנתונים המלא של PM. מכיוון שמונע בהקלטה, אותו מנוע מתרחב ל-QM, MM וכל טרנזקציה אחרת שתקליט.</p>
+      </div>
+      <div class="objects-grid">
+        <div class="obj"><span class="obj-code">IE01 / IE02</span><span class="obj-name">ציוד</span></div>
+        <div class="obj"><span class="obj-code">IL01 / IL02</span><span class="obj-name">מיקומים פונקציונליים</span></div>
+        <div class="obj"><span class="obj-code">IK01</span><span class="obj-name">נקודות מדידה</span></div>
+        <div class="obj"><span class="obj-code">IA05 / IA06</span><span class="obj-name">רשימות משימות</span></div>
+        <div class="obj"><span class="obj-code">IP01 / IP42</span><span class="obj-name">תוכניות תחזוקה</span></div>
+        <div class="obj"><span class="obj-code">IR01</span><span class="obj-name">מרכזי עבודה</span></div>
+        <div class="obj"><span class="obj-code">QS41</span><span class="obj-name">קטלוגים QM</span></div>
+        <div class="obj"><span class="obj-code">ME21N</span><span class="obj-name">הזמנות רכש MM</span></div>
+        <div class="obj"><span class="obj-code">+ הקלטה</span><span class="obj-name">כל טרנזקציה אחרת</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="eyebrow">תהליך עבודה</p>
+        <h2>מגיליון אלקטרוני ל-SAP בארבעה שלבים</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">שלב 1</div><h3>צור תבנית</h3><p>בחר את האובייקט שלך ו-IBIPTool יפיק את תבנית ה-Excel המתאימה.</p></div>
+        <div class="step"><div class="step-num">שלב 2</div><h3>מלא את הנתונים</h3><p>אכלס שורות ב-Excel — או מצה נתוני SAP קיימים, ערוך וטען מחדש.</p></div>
+        <div class="step"><div class="step-num">שלב 3</div><h3>ריצת בדיקה</h3><p>אמת הכל מול SAP מבלי לפרסם. סקור ותקן שורות שסומנו.</p></div>
+        <div class="step"><div class="step-num">שלב 4</div><h3>העלה</h3><p>התחייב לטעינה. IBIPTool מניע IBIP/BDC ליצור ולעדכן רשומות ב-SAP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GuiXT Section -->
+  <section id="guixt">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="eyebrow">SY-Bright</p>
+        <h2>IBIPTool ו-GuiXT — שני כלים, שתי בעיות שונות</h2>
+        <p style="color:var(--muted);max-width:620px;margin:0 auto">SY-Bright מציעה מומחיות ב-SAP הן ב-IBIPTool והן ב-GuiXT — שני הכלים המובילים לשיפור ממשק ה-SAP ולניהול נתונים בקנה מידה.</p>
+      </div>
+      <div class="guixt-box">
+        <div>
+          <h3>IBIPTool — העלאת נתונים מ-Excel</h3>
+          <p>לכשצריך ליצור או לעדכן <strong>אלפי רשומות SAP PM</strong> — ציוד, מיקומים, תוכניות תחזוקה ועוד — IBIPTool עושה את זה מ-Excel בריצה אחת, עם אימות לפני פרסום.</p>
+          <ul>
+            <li>מסות של נתוני מאסטר ועסקאות</li>
+            <li>מבוסס IBIP סטנדרטי — ללא כתיבה ישירה לטבלאות</li>
+            <li>רץ בתוך SAP כ-ABAP פתוח</li>
+            <li>ריצת בדיקה בטוחה לפני פרסום</li>
+          </ul>
+          <a class="btn btn-primary" href="#contact" style="margin-top:16px;display:inline-flex">בקש הדגמה</a>
+        </div>
+        <div>
+          <h3>GuiXT — התאמת ממשק SAP</h3>
+          <p>לכשצריך <strong>לשנות את מסכי SAP</strong> — הסתרת שדות, הוספת לוגיקה, שיפור ממשק המשתמש — GuiXT מאפשר זאת ללא שינוי קוד ABAP.</p>
+          <ul>
+            <li>התאמת מסכים קיימים ב-SAP GUI</li>
+            <li>הסתרה, שינוי ושיפור של שדות ולחצנים</li>
+            <li>הוספת לוגיקה עסקית בצד-לקוח</li>
+            <li>שיפור חוויית משתמש ללא פיתוח ABAP</li>
+          </ul>
+          <a class="btn btn-ghost" href="https://sy-bright.co.il" target="_blank" rel="noopener" style="margin-top:16px;display:inline-flex">מידע על GuiXT &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="cta-band">
+        <p class="eyebrow">התחל</p>
+        <h2>הבא את IBIPTool לסביבת ה-SAP שלך</h2>
+        <p>בקש רישיון או הדגמה חיה. נראה לך כמה מהירה יכולה להיות העברת נתוני PM.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="mailto:zivm@sy-bright.co.il?subject=IBIPTool%20רישיון">שלח מייל לרישיון</a>
+          <a class="btn btn-ghost" href="mailto:zivm@sy-bright.co.il?subject=IBIPTool%20הדגמה">בקש הדגמה</a>
+        </div>
+        <p class="micro">zivm@sy-bright.co.il · זיו מרקוביץ׳, SY-Bright · א׳–ה׳ 09:00–17:00</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="logo-chip"><img src="../logo.png" alt="IBIPTool" /></span>
+    <div>© <span id="yr"></span> IBIPTool — כל הזכויות שמורות. SAP ו-IBIP הם סימנים מסחריים של SAP SE. IBIPTool הינו מוצר עצמאי ואינו קשור ל-SAP SE.</div>
+    <div><a href="mailto:zivm@sy-bright.co.il">zivm@sy-bright.co.il</a></div>
+  </div>
+</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
